@@ -1,0 +1,21 @@
+- EXEMPLO CRUD para cadastros CEP
+
+Especificações
+- Aplicação construída com Maven
+- Aplicação standalone utilizando SpringBoot*
+- Aplicação utiliza SpringMVC
+- Validações feitas diretamente na declaração/chamada dos serviços REST
+- A aplicação recebe e responde por GET/POST em formato JSON utilizando a implementação de controles spring
+- A camada de apresentação utiliza Thymeleaf
+
+Instalação
+- É possível rodar a aplicação por meio do maven com o comando "mvn spring-boot:run"
+
+Para teste
+- Acessar http://localhost:8080/address_crud/get
+
+Curiosidades
+- O spring boot por padrão está rodando na porta 8080 mas se necessário para o deploy a porta pode ser trocada apenas adicionando a nova porta em application.properties
+
+* Por quê SpringBoot ?
+Hoje com o aumento da exigência nas áreas de segurança das empresas e também facilidade no deploy das aplicações recomenda-se que utilizemos aplicações que não expõem diretamente a aplicação dentro de um servidor de aplicação como o tomcat, por esse motivo aplicações standalone como a solução da Spring Foundation, o Boot é uma boa prática.
