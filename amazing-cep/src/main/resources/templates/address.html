@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8"></meta>
+    <title>Endereços</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.1/jquery.min.js"></script>
+	
+</head>
+<body>
+
+<h1>Cadastro endereços</h1>
+
+<h3 th:if="${errorMessage} != null" th:text="${errorMessage}"></h3>
+
+Selecionar endereço:<br/>
+<select id="address_list">
+	<option>Selecione</option>
+	<option th:each="addr : ${addressList}" th:text="${addr.addressId}" th:value="${addr.addressId}"></option>
+</select> - <input type="button" id="create" value="Novo"/>
+
+<br/><br/>
+
+<div th:if="${address} != null">
+	<h2>Editar</h2>
+	<form action="/address_crud/save" method="POST">
+	<input type="hidden" class="form-control" th:field="${address.addressId}"/>
+	CEP: <input type="text" class="form-control" th:field="${address.zipcode}"/> <input type="button" id="search" value="Consultar"/><br/><br/>
+	Rua: <input type="text" class="form-control" th:field="${address.street}"/><br/>
+	Complemento: <input type="text" class="form-control" th:field="${address.extras}"/><br/>
+	Numero: <input type="text" class="form-control" th:field="${address.number}"/><br/>
+	Estado: <input type="text" class="form-control" th:field="${address.state}"/><br/>
+	Cidade: <input type="text" class="form-control" th:field="${address.city}"/><br/>
+	Bairro: <input type="text" class="form-control" th:field="${address.neighborhood}"/><br/><br/>
+	<input type="submit" value="Salvar"/> <input type="button" id="delete" value="Remover"/>
+	</form>
+</div>
+
+<div th:if="${address} == null">
+	<h2>Novo</h2>
+	<form action="/address_crud/save" method="POST"> 
+	CEP: <input type="text" name="zipcode" id="zipcode" class="form-control"/> <input type="button" id="search" value="Consultar"/><br/><br/>
+	Rua: <input type="text" id="street" name="street" class="form-control"/><br/>
+	Complemento: <input type="text" name="extras" class="form-control"/><br/>
+	Numero: <input type="text" name="number" class="form-control"/><br/>
+	Estado: <input type="text" id="state" name="state" class="form-control"/><br/>
+	Cidade: <input type="text" id="city" name="city" class="form-control"/><br/>
+	Bairro: <input type="text" id="neighborhood" name="neighborhood" class="form-control"/><br/><br/>
+	<input type="submit" value="Criar"/>
+	</form>
+</div>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+   
+		$(function(){
+			
+			$('#create').click(function()
+			{
+				$(location).attr('href',"/address_crud/get");
+			});
+			
+			$('#delete').click(function()
+			{
+				$(location).attr('href',"/address_crud/remove?addressId="+$("#addressId").val());
+			});
+			
+			$('#address_list').change(function()
+			{
+				var option = $(this).find('option:selected').val();
+				console.log(option)
+				if(option)
+					$(location).attr('href',"/address_crud/get?addressId="+option);
+			});
+
+			
+			$("#search").click(function() {
+
+				$.ajax({
+			      url: "/address/get?zipcode="+$("#zipcode").val(), 
+			      method: 'POST', 
+			      data: '',
+			      dataType:'json', 
+			      success: function(response) {
+					if(response.error == "1"){
+						alert(response.errorDescription)
+					} else {
+						console.log(response.responseObject)
+						$("#state").val(response.responseObject.state);
+						$("#city").val(response.responseObject.city);
+						$("#street").val(response.responseObject.street);
+						$("#neighborhood").val(response.responseObject.neighborhood);
+					}
+			      }
+			    });
+				  
+			});
+
+		});
+
+/*]]>*/
+</script>
+
+</body>
+</html>
